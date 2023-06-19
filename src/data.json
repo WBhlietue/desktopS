@@ -1,0 +1,52 @@
+{
+    "main": {
+        "backgroundImage": "./image.jpg",
+        "backgroundColor": "#000000",
+        "backgroundOpacity": 0.8,
+        "border": "#ffffff 1px solid",
+        "border-boxShadow": "inset 0px 0px 1px 1px #ffffff"
+    },
+    "windows": [
+        {
+            "size": 1,
+            "item": [
+                {
+                    "size": 1,
+                    "item": "clock"
+                },
+                {
+                    "size": 1,
+                    "item": "file"
+                }
+            ]
+        },
+        {
+            "size": 3,
+            "item": [
+                {
+                    "size": 2,
+                    "item": "terminal"
+                },
+                {
+                    "size": 1,
+                    "item": "application"
+                }
+            ]
+        },
+        {
+            "size": 1,
+            "item": [
+                {
+                    "size": 1,
+                    "item": "system"
+                }
+            ]
+        }
+    ],
+    "clock": {
+        "align": "start",
+        "padding": "50px",
+        "timeFontSize": "50px",
+        "dateFontSize": "30px"
+    }
+}

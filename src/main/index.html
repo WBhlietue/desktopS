@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="background"></div>
+    <div id="backgroundMask"></div>
+    <div id="main"></div>
+   
+    <script type="module">
+        function Create(id, type="div"){
+            const div = document.createElement(type)
+            div.id = id
+            return div
+        }
+        fetch("../data.json").then((res) => {
+            res.json().then((data) => {
+                document.getElementById("background").style.backgroundImage = `url(${data.main.backgroundImage})`
+                document.getElementById("backgroundMask").style.backgroundColor = data.main.backgroundColor
+                document.getElementById("backgroundMask").style.opacity = data.main.backgroundOpacity
+
+                const main = document.getElementById("main")
+                
+                main.style.border = data.main.border
+                const rows = data.windows;
+                for(let i of rows){
+                    const elem = Create("rowItem")
+                    elem.style.flex = i.size
+                    for(let j of i.item){
+                        const c = Create("columnItem", "iframe")
+                        c.src = `../${j.item}/index.html`
+                        c.style.flex= j.size
+                        c.style.border= data.main.border
+                        c.style.boxShadow = data.main["border-boxShadow"]
+                        c.onload=()=>{
+                            c.contentWindow.require = window.require;
+                        }
+                        elem.appendChild(c)
+                    }
+                    main.appendChild(elem)
+                }
+            })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+#background{
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
+#backgroundMask{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+}
+#main{
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    flex:1;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+#rowItem{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+#columnItem{
+    box-sizing: border-box;
+
+}
