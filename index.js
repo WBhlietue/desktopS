@@ -6,13 +6,6 @@ const CreateWindow = () => {
             contextIsolation: false,
         },
         
-        //hi
-        // frame:false
-        //hi
-        //asd
-        //uo
-        //
-        //
     });
     win.maximize();
     win.loadFile("./src/main/index.html");
