@@ -6,6 +6,7 @@ const CreateWindow = () => {
             contextIsolation: false,
         },
         
+        //hi
         // frame:false
     });
     win.maximize();
