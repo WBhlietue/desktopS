@@ -1,14 +1,18 @@
 {
   "dependencies": {
-    "electron": "^25.1.1"
+    "electron": "^25.1.1",
+    "electron-rebuild": "^3.2.9",
+    "node-pty": "^1.0.0",
+    "xterm": "^5.2.1",
+    "xterm-addon-fit": "^0.7.0"
   },
   "name": "desktop",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "rebuild": "electron-rebuild "
   },
   "author": "",
   "license": "ISC",

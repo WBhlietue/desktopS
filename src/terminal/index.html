@@ -1,12 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    terminal
-</body>
+    <link rel="stylesheet" href="xterm.css" />
+  </head>
+  <body>
+    <div id="terminal"></div>
+    <!-- <textarea id="terminal"></textarea> -->
+    <script>
+      const require = window.parent.require;
+      const Terminal = require("xterm").Terminal;
+      const FitAddon = require("xterm-addon-fit").FitAddon;
+      const { ipcRenderer } = require("electron");
+
+        const term = new Terminal();
+        const fitAddon = new FitAddon();
+        term.loadAddon(fitAddon);
+
+      //   // Open the terminal in #terminal-container
+        term.open(document.getElementById("terminal"));
+    //   const term = document.getElementById("terminal");
+
+    //   term.addEventListener("keydown", (e) => {
+    //     console.log(e);
+    //     let data =e.key;
+    //     if(data == "Enter"){
+    //         data = "";
+    //     }
+    //     ipcRenderer.send("terminal-into",data);
+    //   });
+      term.onData((e) => {
+        console.log("123" + e + "321");
+        ipcRenderer.send("terminal-into", e);
+      });
+      ipcRenderer.on("terminal-incData", (event, data) => {
+        term.write(data);
+        
+        // term.innerHTML += data
+      });
+
+      // Make the terminal's size and geometry fit the size of #terminal-container
+    //   fitAddon.fit();
+    </script>
+  </body>
 </html>

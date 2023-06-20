@@ -1,31 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div id="main">
-        <div class="item">
-            <div class="title">Ram</div>
-            <div class="progress">
-                <div class="progressBar" id="ramProg"></div>
-            </div>
-            
+      <div class="item">
+        <div class="row">
+          <div class="title">Ram</div>
+          <div class="progress">
+            <div class="progressBar" id="ramProg"></div>
+          </div>
         </div>
+        <div class="ramValue"></div>
+      </div>
     </div>
     <script type="module">
-        const requrie = window.parent.require
-        const os = requrie("os")
-        console.log(os);
-        const ramProg = document.getElementById("ramProg")
-        setInterval(() => {
-            ramProg.style.transform = "translateX(-"+(os.freemem / os.totalmem * 100)+"%)"
-        }, 500);
-        ramProg.style.transform = "translateX(-"+(os.freemem / os.totalmem * 100)+"%)"
+      const requrie = window.parent.require;
+      const os = requrie("os");
+      console.log(os);
+      const ramProg = document.getElementById("ramProg");
+      const ramValue = document.querySelector(".ramValue");
+      setInterval(() => {
+        SetData();
+      }, 500);
+      function SetData() {
+        ramProg.style.transform =
+          "translateX(-" + (os.freemem / os.totalmem) * 100 + "%)";
+        ramValue.innerHTML = `[${
+          parseInt(((os.totalmem-os.freemem) / 1024 / 1024 / 1024) * 100) / 100
+        }GB/${parseInt((os.totalmem / 1024 / 1024 / 1024) * 100) / 100}GB] (${parseInt((os.totalmem-os.freemem) / os.totalmem * 100*100)/100}%))`;
+      }
+      SetData();
     </script>
-</body>
+  </body>
 </html>
