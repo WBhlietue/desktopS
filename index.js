@@ -12,6 +12,7 @@ const CreateWindow = () => {
         //asd
         //uo
         //
+        //
     });
     win.maximize();
     win.loadFile("./src/main/index.html");
