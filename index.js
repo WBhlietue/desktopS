@@ -9,7 +9,7 @@ const CreateWindow = () => {
         //hi
         // frame:false
         //hi
-
+        //asd
         //uo
     });
     win.maximize();
