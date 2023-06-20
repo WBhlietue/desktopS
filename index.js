@@ -8,6 +8,7 @@ const CreateWindow = () => {
         
         //hi
         // frame:false
+        //hi
     });
     win.maximize();
     win.loadFile("./src/main/index.html");
