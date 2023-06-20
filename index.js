@@ -5,7 +5,7 @@ const CreateWindow = () => {
             nodeIntegration: true,
             contextIsolation: false,
         },
-        
+        //
         //frame: false,
         //
     });
