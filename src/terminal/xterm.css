@@ -1,4 +1,4 @@
-
+    
 
  .xterm {
     cursor: text;
@@ -172,3 +172,23 @@
     z-index: 2;
     position: relative;
 }
+body{
+    /* overflow: hidden; */
+    margin: 0;
+    padding:  0;
+}
+.main{
+
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#terminal {
+    flex: 1;
+    padding:  10px;
+    /* overflow: hidden; */
+  }
+ 

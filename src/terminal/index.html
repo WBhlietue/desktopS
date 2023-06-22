@@ -1,49 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="xterm.css" />
-  </head>
-  <body>
-    <div id="terminal"></div>
-    <!-- <textarea id="terminal"></textarea> -->
-    <script>
-      const require = window.parent.require;
-      const Terminal = require("xterm").Terminal;
-      const FitAddon = require("xterm-addon-fit").FitAddon;
-      const { ipcRenderer } = require("electron");
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="xterm.css" />
+    </head>
+    <body>
+        <div class="main">
+            <div id="terminal"></div>
+        </div>
+        <!-- <textarea id="terminal"></textarea> -->
+        <script>
+            var textSize = 12;
+            const require = window.parent.require;
+            const Terminal = require("xterm").Terminal;
+            const { ipcRenderer } = require("electron");
+            const container = document.getElementById("terminal");
+            const term = new Terminal({
+                theme: {
+                    background: "#ff000000", // 背景颜色
+                    foreground: "#ffffff", // 文本颜色
+                    innerHeight: 50,
+                },
+            });
 
-        const term = new Terminal();
-        const fitAddon = new FitAddon();
-        term.loadAddon(fitAddon);
+            window.addEventListener("resize", () => {
+                SetSize();
+            });
+            // SetSize();
+            setTimeout(() => {
+                SetSize();
+            }, 100);
+            function SetSize() {
+                const columns = Math.floor(
+                    container.clientWidth /
+                        term._core._renderService.dimensions.css.cell.width
+                );
+                const rows = Math.floor(
+                    container.clientHeight /
+                        term._core._renderService.dimensions.css.cell.height
+                );
 
-      //   // Open the terminal in #terminal-container
-        term.open(document.getElementById("terminal"));
-    //   const term = document.getElementById("terminal");
+                term.resize(parseInt(columns), parseInt(rows-1));
+            }
+            term.open(document.getElementById("terminal"));
+            ipcRenderer.send("terminal-into", "\r");
+            //   const term = document.getElementById("terminal");
 
-    //   term.addEventListener("keydown", (e) => {
-    //     console.log(e);
-    //     let data =e.key;
-    //     if(data == "Enter"){
-    //         data = "";
-    //     }
-    //     ipcRenderer.send("terminal-into",data);
-    //   });
-      term.onData((e) => {
-        console.log("123" + e + "321");
-        ipcRenderer.send("terminal-into", e);
-      });
-      ipcRenderer.on("terminal-incData", (event, data) => {
-        term.write(data);
-        
-        // term.innerHTML += data
-      });
+            //   term.addEventListener("keydown", (e) => {
+            //     console.log(e);
+            //     let data =e.key;
+            //     if(data == "Enter"){
+            //         data = "";
+            //     }
+            //     ipcRenderer.send("terminal-into",data);
+            //   });
+            term.onData((e) => {
+                console.log("123" + e + "321");
+                ipcRenderer.send("terminal-into", e);
+            });
+            ipcRenderer.on("terminal-incData", (event, data) => {
+                term.write(data);
 
-      // Make the terminal's size and geometry fit the size of #terminal-container
-    //   fitAddon.fit();
-    </script>
-  </body>
+                // term.innerHTML += data
+            });
+
+            // Make the terminal's size and geometry fit the size of #terminal-container
+            //   fitAddon.fit();
+        </script>
+    </body>
 </html>

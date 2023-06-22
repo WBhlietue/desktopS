@@ -1,6 +1,6 @@
 {
     "main": {
-        "backgroundImage": "./image.jpgk",
+        "backgroundImage": "./image.jpg",
         "backgroundColor": "#000000",
         "backgroundOpacity": 0.8,
         "border": "#ffffff 1px solid",
