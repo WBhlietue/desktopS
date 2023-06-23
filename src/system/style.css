@@ -26,3 +26,16 @@
     background-color: rgb(0, 255, 0);
     flex: 1;
 }
+
+.gridDataParent{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-flow: row wrap;
+    justify-content: center;
+
+  }
+  .gridData{
+    padding: 5px;
+    border: white 1px solid
+  }
