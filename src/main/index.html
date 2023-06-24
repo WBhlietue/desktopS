@@ -1,51 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
-</head>
-<body>
-    <div id="background"></div>
-    <div id="backgroundMask"></div>
-    <div id="main"></div>
-   
-    <script type="module">
-        function Create(id, type="div"){
-            const div = document.createElement(type)
-            div.id = id
-            return div
-        }
-        fetch("../data.json").then((res) => {
-            res.json().then((data) => {
-                document.getElementById("background").style.backgroundImage = `url(${data.main.backgroundImage})`
-                document.getElementById("backgroundMask").style.backgroundColor = data.main.backgroundColor
-                document.getElementById("backgroundMask").style.opacity = data.main.backgroundOpacity
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div id="background"></div>
+        <div id="backgroundMask"></div>
+        <div id="main"></div>
 
-                const main = document.getElementById("main")
-                
-                main.style.border = data.main.border
-                const rows = data.windows;
-                for(let i of rows){
-                    const elem = Create("rowItem")
-                    elem.style.flex = i.size
-                    for(let j of i.item){
-                        const c = Create("columnItem", "iframe")
-                        c.src = `../${j.item}/index.html`
-                        c.style.flex= j.size
-                        c.style.border= data.main.border
-                        c.style.boxShadow = data.main["border-boxShadow"]
-                        c.onload=()=>{
-                            c.contentWindow.require = window.require;
+        <script type="module">
+            const datas = [];
+            function Create(id, type = "div") {
+                const div = document.createElement(type);
+                div.id = id;
+                return div;
+            }
+            const requestName = 0;
+            const textChange = [];
+            const ipcRenderer = window.parent.require("electron").ipcRenderer;
+            let windows;
+            var backUp;
+            var textEditor;
+            ipcRenderer.send("getData", requestName);
+            ipcRenderer.on("data", (event, dat) => {
+                if (dat.requestName == requestName) {
+                    const data = dat.data;
+                    windows = data.windows;
+                    textChange.push(data.file.fileEditor);
+                    document.getElementById(
+                        "background"
+                    ).style.backgroundImage = `url(${data.main.backgroundImage})`;
+                    document.getElementById(
+                        "backgroundMask"
+                    ).style.backgroundColor = data.main.backgroundColor;
+                    document.getElementById("backgroundMask").style.opacity =
+                        data.main.backgroundOpacity;
+
+                    const main = document.getElementById("main");
+
+                    main.style.border = data.main.border;
+                    const rows = data.windows;
+                    for (let i of rows) {
+                        const elem = Create("rowItem");
+                        elem.style.flex = i.size;
+                        for (let j of i.item) {
+                            const c = Create("columnItem", "iframe");
+                            c.src = `../${j.item}/index.html`;
+
+                            c.style.flex = j.size;
+                            c.style.border = data.main.border;
+                            c.style.boxShadow = data.main["border-boxShadow"];
+                            c.onload = () => {
+                                c.contentWindow.require = window.require;
+                                if (j.size == 0) {
+                                    console.log(c.contentWindow);
+                                    c.style.height =
+                                        c.contentWindow.document.body
+                                            .scrollHeight + "px";
+                                }
+                            };
+                            // datas.push({ name: j.item, data: c });
+                            if (j.item == data.file.fileEditor) {
+                                textEditor = c;
+                                elem.appendChild(textEditor);
+                            } else {
+                                elem.appendChild(c);
+                            }
                         }
-                        elem.appendChild(c)
+                        main.appendChild(elem);
                     }
-                    main.appendChild(elem)
                 }
-            })
-        })
-    </script>
-</body>
+            });
+
+            ipcRenderer.on("changeText", (event, dir) => {
+                if (textEditor.src.split("?").length == 1) {
+                    backUp = textEditor.src;
+                }
+                textEditor.src = "../textEdit/index.html?dir=" + dir;
+            });
+            ipcRenderer.on("backFromText", (event, dir) => {
+                textEditor.src = backUp;
+            });
+        </script>
+    </body>
 </html>

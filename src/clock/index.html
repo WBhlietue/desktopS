@@ -1,42 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="clockMain">
-        <div id="time"></div>
-        <div id="date"></div>
-    </div>
-    <script>
-        const timeCont = document.getElementById("time")
-        const dateCont = document.getElementById("date")
-        fetch("../data.json").then((res) => {
-            res.json().then((data) =>{ 
-
-                timeCont.style.fontSize = data.clock.timeFontSize
-                dateCont.style.fontSize = data.clock.dateFontSize
-                document.getElementById("clockMain").style.justifyContent = data.clock.align
-                document.getElementById("clockMain").style.padding = data.clock.padding
-            })
-        })
-        const interval = setInterval(() => {
+    <head>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="clockMain">
+            <div id="time"></div>
+            <div id="date"></div>
+        </div>
+        <script>
+            const timeCont = document.getElementById("time");
+            const dateCont = document.getElementById("date");
+            const ipcRenderer = window.parent.require("electron").ipcRenderer;
+            const requestName = 1
+            ipcRenderer.send("getData", requestName);
+            ipcRenderer.on("data", (event, dat) => {
+                if (dat.requestName == requestName) {
+                    const data = dat.data;
+                    timeCont.style.fontSize = data.clock.timeFontSize;
+                    dateCont.style.fontSize = data.clock.dateFontSize;
+                    document.getElementById("clockMain").style.justifyContent =
+                        data.clock.align;
+                    document.getElementById("clockMain").style.padding =
+                        data.clock.padding;
+                }
+            });
+            // fetch("../data.json").then((res) => {
+            //     res.json().then((data) => {
+            //         timeCont.style.fontSize = data.clock.timeFontSize;
+            //         dateCont.style.fontSize = data.clock.dateFontSize;
+            //         document.getElementById("clockMain").style.justifyContent =
+            //             data.clock.align;
+            //         document.getElementById("clockMain").style.padding =
+            //             data.clock.padding;
+            //     });
+            // });
+            const interval = setInterval(() => {
+                SetTime();
+            }, 1000);
             SetTime();
-        }, 1000)
-        SetTime();
-        function SetTime(){
-            const date = new Date()
-            const hours = date.getHours()
-            const minutes = date.getMinutes()
-            const seconds = date.getSeconds()
-            const time = (hours< 10 ? "0":"") + hours + ":" + (minutes < 10? "0":"") + minutes + ":" + (seconds < 10? "0":"")+seconds
-            timeCont.innerHTML = time
-            const day = date.getDate()
-            const month = date.getMonth() + 1
-            const year = date.getFullYear()
-            const dateStr = (day < 10 ? "0":"") + day + "/" + (month < 10 ? "0":"") + month + "/" + year
-            dateCont.innerHTML = dateStr
-        }
-    </script>
-</body>
+            function SetTime() {
+                const date = new Date();
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                const seconds = date.getSeconds();
+                const time =
+                    (hours < 10 ? "0" : "") +
+                    hours +
+                    ":" +
+                    (minutes < 10 ? "0" : "") +
+                    minutes +
+                    ":" +
+                    (seconds < 10 ? "0" : "") +
+                    seconds;
+                timeCont.innerHTML = time;
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                const dateStr =
+                    (day < 10 ? "0" : "") +
+                    day +
+                    "/" +
+                    (month < 10 ? "0" : "") +
+                    month +
+                    "/" +
+                    year;
+                dateCont.innerHTML = dateStr;
+            }
+        </script>
+    </body>
 </html>

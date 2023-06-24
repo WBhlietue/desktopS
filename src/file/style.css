@@ -1,0 +1,70 @@
+::-webkit-scrollbar {
+    background-color: #f1f1f100;
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+#fileList {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+}
+.driver {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    width: 100%;
+}
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    margin: 10px;
+    cursor: pointer;
+}
+.item:focus{
+    border: 2px white solid;
+
+}
+.itemName {
+    color: white;
+    word-wrap: break-word;
+}
+.itemIcon {
+    height: 32px;
+    width: 32px;
+    background-size: contain;
+    background-position: center;
+    margin: 10px;
+}
+.fileIcon {
+    background-image: url("./file.png");
+}
+.folderIcon {
+    background-image: url("./folder.png");
+}
+
+.control {
+    display: flex;
+    flex-direction: row;
+}
+.controlBtn {
+    width: 32px;
+    height: 32px;
+    border: 2px white solid;
+    border-radius: 30%;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+img {
+    width: 20px;
+    height: 20px;
+}

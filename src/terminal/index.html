@@ -15,7 +15,8 @@
         <script>
             var textSize = 12;
             const require = window.parent.require;
-            const Terminal = require("xterm").Terminal;
+            const { Terminal } = require("xterm");
+            const { FitAddon } = require("xterm-addon-fit");
             const { ipcRenderer } = require("electron");
             const container = document.getElementById("terminal");
             const term = new Terminal({
@@ -23,8 +24,15 @@
                     background: "#ff000000", // 背景颜色
                     foreground: "#ffffff", // 文本颜色
                     innerHeight: 50,
+                    cursorBlink: true,
+                    cursorStyle: "underline",
+                    cursorAccentColor: "#ff0000",
                 },
             });
+
+            const fitAddon = new FitAddon();
+            term.loadAddon(fitAddon);
+            fitAddon.fit();
 
             window.addEventListener("resize", () => {
                 SetSize();
@@ -43,7 +51,7 @@
                         term._core._renderService.dimensions.css.cell.height
                 );
 
-                term.resize(parseInt(columns), parseInt(rows-1));
+                term.resize(parseInt(columns), parseInt(rows - 1));
             }
             term.open(document.getElementById("terminal"));
             ipcRenderer.send("terminal-into", "\r");
@@ -58,17 +66,16 @@
             //     ipcRenderer.send("terminal-into",data);
             //   });
             term.onData((e) => {
-                console.log("123" + e + "321");
                 ipcRenderer.send("terminal-into", e);
             });
             ipcRenderer.on("terminal-incData", (event, data) => {
                 term.write(data);
+                const totalLines = term.buffer.active.baseY;
+
+                console.log( totalLines);
 
                 // term.innerHTML += data
             });
-
-            // Make the terminal's size and geometry fit the size of #terminal-container
-            //   fitAddon.fit();
         </script>
     </body>
 </html>

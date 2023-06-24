@@ -1,20 +1,22 @@
 {
-  "dependencies": {
-    "electron": "^25.1.1",
-    "electron-rebuild": "^3.2.9",
-    "node-pty": "^1.0.0",
-    "xterm": "^5.2.1",
-    "xterm-addon-fit": "^0.7.0"
-  },
-  "name": "desktop",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "rebuild": "electron-rebuild "
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+    "dependencies": {
+        "electron": "^25.1.1",
+        "electron-packager": "^17.1.1",
+        "electron-rebuild": "^3.2.9",
+        "node-pty": "^1.0.0",
+        "xterm": "^5.2.1",
+        "xterm-addon-fit": "^0.7.0"
+    },
+    "name": "desktop",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "electron .",
+        "rebuild": "electron-rebuild ",
+        "package": "electron-packager . DesktopS --platform=win32 --arch=x64 --icon=moon.ico --out=./out --app-version=0.0.1 --overwrite && cd ./out/DesktopS-win32-x64"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": ""
 }

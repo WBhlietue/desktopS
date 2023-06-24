@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="control">
+            <div class="controlsBtn" id="back">
+                <img src="./back.png" />
+            </div>
+            <div id="fileName"></div>
+        </div>
+        <div id="edits">
+            <div class="text">
+                <textarea readonly id="line"></textarea>
+                <textarea id="editor" spellcheck="false"></textarea>
+            </div>
+        </div>
+        <div id="others"></div>
+        <script>
+            //get urlParam
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const require = window.parent.require;
+            const url = urlParams.get("dir");
+            const ipcRenderer = require("electron").ipcRenderer;
+            const fs = require("fs");
+            const lineNumber = document.getElementById("line");
+            const editor = document.getElementById("editor");
+            let fontSize = 16;
+            let minLine;
+            const minSize = editor.offsetWidth;
+            let extension = url.split(".").pop();
+            ipcRenderer.on("data", (event, dat) => {
+                if (dat.requestName == 3) {
+                    fontSize = dat.data.file.fontSize;
+                    minLine = parseInt(window.innerHeight / fontSize);
+                    editor.style.fontSize = fontSize + "px";
+                    lineNumber.style.fontSize = fontSize + "px";
+                }
+            });
+            document.getElementById("fileName").innerHTML = url;
+            document.getElementById("fileName").style.fontSize =
+                fontSize + "px";
+            fetch("./data.json").then((res) => {
+                res.json().then((data) => {
+                    if (data.image.indexOf(extension) != -1) {
+                        document.getElementById("edits").style.display = "none";
+                        const img = document.createElement("img");
+                        img.src = url;
+                        document.getElementById("others").appendChild(img);
+                    } else if (data.video.indexOf(extension) != -1) {
+                        document.getElementById("edits").style.display = "none";
+                        const video = document.createElement("video");
+                        video.src = url;
+                        video.controls = true;
+                        document.getElementById("others").appendChild(video);
+                    } else if (data.audio.indexOf(extension) != -1) {
+                        document.getElementById("edits").style.display = "none";
+                        const audio = document.createElement("audio");
+                        audio.src = url;
+                        audio.controls = true;
+                        document.getElementById("others").appendChild(audio);
+                    } else if (data.pdf.indexOf(extension) != -1) {
+                        document.getElementById("edits").style.display = "none";
+                        const pdf = document.createElement("iframe");
+                        pdf.src = url;
+                        document.getElementById("others").appendChild(pdf);
+                    } else if (data.cannotOpen.indexOf(extension) != -1) {
+                        document.getElementById("edits").style.display = "none";
+                        const p = document.createElement("p");
+                        p.innerHTML = "Cannot open this file";
+                        document.getElementById("others").appendChild(p);
+                    } else {
+                        document.getElementById("others").style.display =
+                            "none";
+                        ipcRenderer.send("getData", 3);
+
+                        fs.readFile(url, "utf-8", (err, data) => {
+                            editor.value = data;
+                            document.getElementById("fileName").innerHTML = url;
+                            document.getElementById("fileName").style.fontSize =
+                                fontSize + "px";
+                            CheckLine();
+                        });
+
+                        editor.addEventListener("change", (e) => {
+                            CheckLine();
+                            Save();
+                        });
+                    }
+                });
+            });
+            document.getElementById("back").addEventListener("click", () => {
+                Back();
+            });
+            function Back() {
+                require("electron").ipcRenderer.send("backChangeColor", 0);
+            }
+            function Save() {
+                fs.writeFile(url, editor.value, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
+            }
+
+            function CheckLine() {
+                const scaleNum = 1.2;
+                const scaleNumX = 0.7;
+                const line = editor.value.split("\n").length;
+                const sizeX = editor.value.split("\n").sort((a, b) => {
+                    return b.length - a.length;
+                })[0].length;
+                if (line > minLine) {
+                    editor.style.height = line * scaleNum * fontSize + "px";
+
+                    lineNumber.style.height = line * scaleNum * fontSize + "px";
+                } else {
+                    editor.style.height = minLine * scaleNum * fontSize + "px";
+                    lineNumber.style.height =
+                        minLine * scaleNum * fontSize + "px";
+                }
+                if (sizeX * fontSize > minSize) {
+                    editor.style.width = sizeX * scaleNumX * fontSize + "px";
+                }
+                lineNumber.innerHTML = "";
+                for (let i = 0; i < line; i++) {
+                    lineNumber.innerHTML += i + 1 + ".\n";
+                }
+            }
+        </script>
+    </body>
+</html>

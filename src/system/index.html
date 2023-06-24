@@ -35,12 +35,13 @@
         <script type="module">
             const requrie = window.parent.require;
             const os = requrie("os");
-            console.log(os);
+
             const ramProg = document.getElementById("ramProg");
             const ramValue = document.querySelector(".ramValue");
             const cpuProg = document.getElementById("cpuProg");
             const cpuValue = document.querySelector(".cpuValue");
-            cpuProg.style.transform = "translateX(-" + (100) + "%)";
+
+            cpuProg.style.transform = "translateX(-" + 100 + "%)";
             cpuValue.innerHTML = `(${0}%) `;
             setInterval(() => {
                 SetData();
@@ -81,13 +82,6 @@
                 TableSet(
                     "Totalmem",
                     parseInt((os.totalmem() / 1024 / 1024 / 1024) * 100) / 100 +
-                        "GB"
-                )
-            );
-            table.appendChild(
-                TableSet(
-                    "Freemem",
-                    parseInt((os.freemem() / 1024 / 1024 / 1024) * 100) / 100 +
                         "GB"
                 )
             );

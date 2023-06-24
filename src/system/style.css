@@ -39,3 +39,14 @@
     padding: 5px;
     border: white 1px solid
   }
+
+
+
+  th{
+    padding: 10px;
+    font-size: 25px;
+  }
+
+  td:first-child{
+    padding-right: 10px;
+ }

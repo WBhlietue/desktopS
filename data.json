@@ -2,7 +2,7 @@
     "main": {
         "backgroundImage": "./image.jpg",
         "backgroundColor": "#000000",
-        "backgroundOpacity": 0.8,
+        "backgroundOpacity": 0.5,
         "border": "#ffffff 1px solid",
         "border-boxShadow": "inset 0px 0px 1px 1px #ffffff"
     },
@@ -26,16 +26,16 @@
                 {
                     "size": 2,
                     "item": "terminal"
-                },
-                {
-                    "size": 1,
-                    "item": "application"
                 }
             ]
         },
         {
             "size": 1,
             "item": [
+                {
+                    "size": 0,
+                    "item": "control"
+                },
                 {
                     "size": 1,
                     "item": "system"
@@ -48,5 +48,19 @@
         "padding": "50px",
         "timeFontSize": "50px",
         "dateFontSize": "30px"
+    },
+    "file": {
+        "folders": [
+            "C:",
+            "C:/Users",
+            "C:/Users/Administrator",
+            "D:/Documents",
+            "D:/Downloads",
+            "D:/Pictures",
+            "D:/Videos",
+            "D:/Desktop"
+        ],
+        "fileEditor": "terminal",
+        "fontSize": 20
     }
 }
