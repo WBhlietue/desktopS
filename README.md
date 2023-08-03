@@ -1,7 +1,7 @@
 # In Mac: 
-## After clone then run InitRunner-Max.sh file. It will automatical install and rebuild depencities
+## After clone then run InitRunner-Mac.sh file. It will automatical install and rebuild depencities
 
 ``` bash
 cd desktopS
-bash InitRunner-Max.sh
+bash InitRunner-Mac.sh
 ```
