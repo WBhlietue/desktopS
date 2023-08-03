@@ -10,7 +10,7 @@ const CreateWindow = (jsonData) => {
         },
         minimizable: false,
         autoHideMenuBar: true,
-        resizable: false,
+        // resizable: false,
         simpleFullscreen: true,
 
         frame: false,

@@ -1,216 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link rel="stylesheet" href="style.css" />
-    </head>
-    <body>
-        <div id="main">
-            <div class="item">
-                <div class="row">
-                    <div class="title">Ram</div>
-                    <div class="progress">
-                        <div class="progressBar" id="ramProg"></div>
-                    </div>
-                </div>
-                <div class="ramValue"></div>
-            </div>
-            <div class="item">
-                <div class="row">
-                    <div class="title">CPU</div>
-                    <div class="progress">
-                        <div class="progressBar" id="cpuProg"></div>
-                    </div>
-                </div>
-                <div class="cpuValue"></div>
-            </div>
-
-            <hr />
-
-            <table id="table"></table>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="main">
+      <div class="item">
+        <div class="row">
+          <div class="title">Ram</div>
+          <div class="progress">
+            <div class="progressBar" id="ramProg"></div>
+          </div>
         </div>
-        <script type="module">
-            const requrie = window.parent.require;
-            const os = requrie("os");
+        <div class="ramValue"></div>
+      </div>
+      <div class="item">
+        <div class="row">
+          <div class="title">CPU</div>
+          <div class="progress">
+            <div class="progressBar" id="cpuProg"></div>
+          </div>
+        </div>
+        <div class="cpuValue"></div>
+      </div>
 
-            const ramProg = document.getElementById("ramProg");
-            const ramValue = document.querySelector(".ramValue");
-            const cpuProg = document.getElementById("cpuProg");
-            const cpuValue = document.querySelector(".cpuValue");
+      <hr />
 
-            cpuProg.style.transform = "translateX(-" + 100 + "%)";
-            cpuValue.innerHTML = `(${0}%) `;
-            setInterval(() => {
-                SetData();
-            }, 1000);
-            function SetData() {
-                ramProg.style.transform =
-                    "translateX(-" + (os.freemem / os.totalmem) * 100 + "%)";
-                ramValue.innerHTML = `[${
-                    parseInt(
-                        ((os.totalmem - os.freemem) / 1024 / 1024 / 1024) * 100
-                    ) / 100
-                }GB/${
-                    parseInt((os.totalmem / 1024 / 1024 / 1024) * 100) / 100
-                }GB] (${
-                    parseInt(
-                        ((os.totalmem - os.freemem) / os.totalmem) * 100 * 100
-                    ) / 100
-                }%))`;
+      <table id="table"></table>
+    </div>
+    <script type="module">
+      const requrie = window.parent.require;
+      const os = requrie("os");
 
-                const cpuData = GetCpuData();
+      const ramProg = document.getElementById("ramProg");
+      const ramValue = document.querySelector(".ramValue");
+      const cpuProg = document.getElementById("cpuProg");
+      const cpuValue = document.querySelector(".cpuValue");
 
-                cpuUsage((v) => {
-                    const usage = parseInt(v * 10000) / 100;
-                    cpuProg.style.transform =
-                        "translateX(-" + (100 - usage) + "%)";
-                    cpuValue.innerHTML = `(${usage}%) `;
-                });
-            }
-            SetData();
-            const table = document.getElementById("table");
-            table.appendChild(TableTitle("Host Info"));
-            table.appendChild(TableSet("Hostname", os.hostname()));
-            table.appendChild(TableSet("Type", os.type()));
-            table.appendChild(TableSet("Platform", os.platform()));
-            table.appendChild(TableSet("Arch", os.arch()));
-            table.appendChild(TableSet("Release", os.release()));
-            table.appendChild(
-                TableSet(
-                    "Totalmem",
-                    parseInt((os.totalmem() / 1024 / 1024 / 1024) * 100) / 100 +
-                        "GB"
-                )
-            );
-            table.appendChild(TableTitle("Network Info"));
-            table.appendChild(
-                TableSet("IPv4", os.networkInterfaces()["Wi-Fi"][1].address)
-            );
-            table.appendChild(
-                TableSet("IPv6", os.networkInterfaces()["Wi-Fi"][0].address)
-            );
-            table.appendChild(
-                TableSet("Mac", os.networkInterfaces()["Wi-Fi"][1].mac)
-            );
-            table.appendChild(TableTitle("CPU Info"));
-            table.appendChild(TableSet("Model", os.cpus()[0].model));
-            table.appendChild(TableSet("Core", os.cpus().length));
-            table.appendChild(TableSet("Speed", os.cpus()[0].speed + "MHz"));
-            const main = document.getElementById("main");
+      cpuProg.style.transform = "translateX(-" + 100 + "%)";
+      cpuValue.innerHTML = `(${0}%) `;
+      setInterval(() => {
+        SetData();
+      }, 1000);
+      function SetData() {
+        ramProg.style.transform =
+          "translateX(-" + (os.freemem / os.totalmem) * 100 + "%)";
+        ramValue.innerHTML = `[${
+          parseInt(((os.totalmem - os.freemem) / 1024 / 1024 / 1024) * 100) /
+          100
+        }GB/${parseInt((os.totalmem / 1024 / 1024 / 1024) * 100) / 100}GB] (${
+          parseInt(((os.totalmem - os.freemem) / os.totalmem) * 100 * 100) / 100
+        }%))`;
 
-            const cpuData = document.createElement("div");
-            cpuData.classList.add("gridDataParent");
+        const cpuData = GetCpuData();
 
-            main.appendChild(cpuData);
-            function SetCpuData() {
-                cpuData.innerHTML = "";
-                cpu.forEach((cpu, index) => {
-                    const cpuDataItem = document.createElement("div");
-                    cpuDataItem.classList.add("gridData");
-                    cpuDataItem.innerHTML = `<br/>CPU ${index < 9 ? "0" : ""}${
-                        index + 1
-                    }: ${cpu.times.user}`;
-                    cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
-                        index + 1
-                    }: ${cpu.times.nice}`;
-                    cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
-                        index + 1
-                    }: ${cpu.times.sys}`;
-                    cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
-                        index + 1
-                    }: ${cpu.times.idle}`;
-                    cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
-                        index + 1
-                    }: ${cpu.times.irq}`;
-                    cpuData.appendChild(cpuDataItem);
-                });
-            }
-            function TableTitle(data) {
-                const th = document.createElement("th");
-                th.colSpan = 2;
-                th.innerHTML = data;
-                return th;
-            }
-            function TableSet(data1, data2) {
-                const d1 = document.createElement("td");
-                d1.innerHTML = data1 + ":";
-                const d2 = document.createElement("td");
-                d2.innerHTML = data2;
-                const tr = document.createElement("tr");
-                tr.appendChild(d1);
-                tr.appendChild(d2);
-                return tr;
-            }
-            function GetCpuData() {
-                const cpu = os.cpus();
-                const cpuData = [];
-                let used = 0;
-                let total = 0;
-                cpu.map((i) => {
-                    used += i.times.user;
-                    used += i.times.nice;
-                    used += i.times.sys;
-                    used += i.times.irq;
-                    total += i.times.user;
-                    total += i.times.nice;
-                    total += i.times.sys;
-                    total += i.times.idle;
-                    total += i.times.irq;
-                });
-                return [used, total];
-            }
-            function Pie(data) {}
+        cpuUsage((v) => {
+          const usage = parseInt(v * 10000) / 100;
+          cpuProg.style.transform = "translateX(-" + (100 - usage) + "%)";
+          cpuValue.innerHTML = `(${usage}%) `;
+        });
+      }
+      SetData();
+      const table = document.getElementById("table");
+      table.appendChild(TableTitle("Host Info"));
+      table.appendChild(TableSet("Hostname", os.hostname()));
+      table.appendChild(TableSet("Type", os.type()));
+      table.appendChild(TableSet("Platform", os.platform()));
+      table.appendChild(TableSet("Arch", os.arch()));
+      table.appendChild(TableSet("Release", os.release()));
+      table.appendChild(
+        TableSet(
+          "Totalmem",
+          parseInt((os.totalmem() / 1024 / 1024 / 1024) * 100) / 100 + "GB"
+        )
+      );
+      table.appendChild(TableTitle("Network Info"));
+      if (os.platform() == "win32") {
+        table.appendChild(
+          TableSet("IPv4", os.networkInterfaces()["Wi-Fi"][1].address)
+        );
+        table.appendChild(
+          TableSet("IPv6", os.networkInterfaces()["Wi-Fi"][0].address)
+        );
+        table.appendChild(
+          TableSet("Mac", os.networkInterfaces()["Wi-Fi"][1].mac)
+        );
+      } else {
+        table.appendChild(
+          TableSet("IPv4", os.networkInterfaces()["en0"][1].address)
+        );
+        table.appendChild(
+          TableSet("IPv6", os.networkInterfaces()["en0"][0].address)
+        );
+        table.appendChild(
+          TableSet("Mac", os.networkInterfaces()["en0"][1].mac)
+        );
+      }
+      table.appendChild(TableTitle("CPU Info"));
+      table.appendChild(TableSet("Model", os.cpus()[0].model));
+      table.appendChild(TableSet("Core", os.cpus().length));
+      table.appendChild(TableSet("Speed", os.cpus()[0].speed + "MHz"));
+      const main = document.getElementById("main");
 
-            function getCPUInfo(callback) {
-                let cpus = os.cpus();
-                let user = 0;
-                let nice = 0;
-                let sys = 0;
-                let idle = 0;
-                let irq = 0;
-                let total = 0;
+      const cpuData = document.createElement("div");
+      cpuData.classList.add("gridDataParent");
 
-                for (let cpu in cpus) {
-                    user += cpus[cpu].times.user;
-                    nice += cpus[cpu].times.nice;
-                    sys += cpus[cpu].times.sys;
-                    irq += cpus[cpu].times.irq;
-                    idle += cpus[cpu].times.idle;
-                }
+      main.appendChild(cpuData);
+      function SetCpuData() {
+        cpuData.innerHTML = "";
+        cpu.forEach((cpu, index) => {
+          const cpuDataItem = document.createElement("div");
+          cpuDataItem.classList.add("gridData");
+          cpuDataItem.innerHTML = `<br/>CPU ${index < 9 ? "0" : ""}${
+            index + 1
+          }: ${cpu.times.user}`;
+          cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
+            index + 1
+          }: ${cpu.times.nice}`;
+          cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
+            index + 1
+          }: ${cpu.times.sys}`;
+          cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
+            index + 1
+          }: ${cpu.times.idle}`;
+          cpuDataItem.innerHTML += `<br/>CPU ${index < 9 ? "0" : ""}${
+            index + 1
+          }: ${cpu.times.irq}`;
+          cpuData.appendChild(cpuDataItem);
+        });
+      }
+      function TableTitle(data) {
+        const th = document.createElement("th");
+        th.colSpan = 2;
+        th.innerHTML = data;
+        return th;
+      }
+      function TableSet(data1, data2) {
+        const d1 = document.createElement("td");
+        d1.innerHTML = data1 + ":";
+        const d2 = document.createElement("td");
+        d2.innerHTML = data2;
+        const tr = document.createElement("tr");
+        tr.appendChild(d1);
+        tr.appendChild(d2);
+        return tr;
+      }
+      function GetCpuData() {
+        const cpu = os.cpus();
+        const cpuData = [];
+        let used = 0;
+        let total = 0;
+        cpu.map((i) => {
+          used += i.times.user;
+          used += i.times.nice;
+          used += i.times.sys;
+          used += i.times.irq;
+          total += i.times.user;
+          total += i.times.nice;
+          total += i.times.sys;
+          total += i.times.idle;
+          total += i.times.irq;
+        });
+        return [used, total];
+      }
+      function Pie(data) {}
 
-                total = user + nice + sys + idle + irq;
+      function getCPUInfo(callback) {
+        let cpus = os.cpus();
+        let user = 0;
+        let nice = 0;
+        let sys = 0;
+        let idle = 0;
+        let irq = 0;
+        let total = 0;
 
-                callback ? callback() : "";
+        for (let cpu in cpus) {
+          user += cpus[cpu].times.user;
+          nice += cpus[cpu].times.nice;
+          sys += cpus[cpu].times.sys;
+          irq += cpus[cpu].times.irq;
+          idle += cpus[cpu].times.idle;
+        }
 
-                return {
-                    idle: idle,
-                    total: total,
-                };
-            }
-            function getCPUUsage(callback, free) {
-                let stats1 = getCPUInfo();
-                let startIdle = stats1.idle;
-                let startTotal = stats1.total;
+        total = user + nice + sys + idle + irq;
 
-                setTimeout(function () {
-                    let stats2 = getCPUInfo();
-                    let endIdle = stats2.idle;
-                    let endTotal = stats2.total;
+        callback ? callback() : "";
 
-                    let idle = endIdle - startIdle;
-                    let total = endTotal - startTotal;
-                    let perc = idle / total;
+        return {
+          idle: idle,
+          total: total,
+        };
+      }
+      function getCPUUsage(callback, free) {
+        let stats1 = getCPUInfo();
+        let startIdle = stats1.idle;
+        let startTotal = stats1.total;
 
-                    if (free === true) callback(perc);
-                    else callback(1 - perc);
-                }, 1000);
-            }
-            function cpuUsage(callback) {
-                getCPUUsage(callback, false);
-            }
-        </script>
-    </body>
+        setTimeout(function () {
+          let stats2 = getCPUInfo();
+          let endIdle = stats2.idle;
+          let endTotal = stats2.total;
+
+          let idle = endIdle - startIdle;
+          let total = endTotal - startTotal;
+          let perc = idle / total;
+
+          if (free === true) callback(perc);
+          else callback(1 - perc);
+        }, 1000);
+      }
+      function cpuUsage(callback) {
+        getCPUUsage(callback, false);
+      }
+    </script>
+  </body>
 </html>

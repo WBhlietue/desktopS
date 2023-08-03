@@ -51,14 +51,6 @@
     },
     "file": {
         "folders": [
-            "C:",
-            "C:/Users",
-            "C:/Users/Administrator",
-            "D:/Documents",
-            "D:/Downloads",
-            "D:/Pictures",
-            "D:/Videos",
-            "D:/Desktop"
         ],
         "fileEditor": "terminal",
         "fontSize": 20
